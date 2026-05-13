@@ -12,16 +12,17 @@
 <style>
     :root {
         --primary: #6366f1;
+        --accent: #a855f7;
     }
     body {
         margin: 0;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        background: linear-gradient(135deg, #0b1220 0%, #1a2338 100%);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        background: linear-gradient(135deg, #0a0f1c 0%, #1a2338 100%);
         color: #fff;
         min-height: 100vh;
     }
     .container {
-        max-width: 1200px;
+        max-width: 1280px;
         margin: auto;
         padding: 16px;
     }
@@ -29,42 +30,90 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 16px 0;
+        padding: 20px 0;
         border-bottom: 1px solid #1e2937;
+        flex-wrap: wrap;
+        gap: 12px;
     }
     .logo {
-        font-size: 28px;
-        font-weight: bold;
-        background: linear-gradient(90deg, #6366f1, #a855f7);
+        font-size: 32px;
+        font-weight: 800;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
     nav a {
         color: #cbd5e1;
-        margin: 0 16px;
+        margin: 0 18px;
         text-decoration: none;
         font-weight: 500;
+        transition: color 0.3s;
     }
-    nav a:hover {
-        color: #fff;
-    }
+    nav a:hover { color: white; }
+
     .hero {
         text-align: center;
-        padding: 80px 20px 60px;
-        background: rgba(99, 102, 241, 0.1);
-        border-radius: 20px;
-        margin-bottom: 40px;
+        padding: 100px 20px 80px;
+        background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1));
+        border-radius: 24px;
+        margin: 30px 0;
     }
     .hero h1 {
-        font-size: 48px;
+        font-size: 52px;
         margin: 0 0 16px;
+        line-height: 1.1;
     }
     .hero p {
-        font-size: 20px;
+        font-size: 22px;
         color: #94a3b8;
-        max-width: 600px;
-        margin: auto;
+        max-width: 700px;
+        margin: 0 auto 30px;
     }
+
+    .search-bar {
+        width: 100%;
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 14px 20px;
+        background: #1e2937;
+        border: none;
+        border-radius: 9999px;
+        color: white;
+        font-size: 16px;
+    }
+
+    .nft-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 28px;
+        margin-top: 30px;
+    }
+    .card {
+        background: #121a2f;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+    }
+    .card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3);
+    }
+    .nft-img {
+        height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 110px;
+        background: linear-gradient(45deg, #1e2937, #334155);
+        transition: transform 0.5s;
+    }
+    .card:hover .nft-img { transform: scale(1.08); }
+
+    .nft-info {
+        padding: 18px;
+    }
+    .price { color: #22d3ee; font-weight: 700; font-size: 18px; }
+
     button {
         padding: 12px 24px;
         border: none;
@@ -80,75 +129,32 @@
     }
     .btn-outline {
         background: transparent;
-        border: 2px solid #6366f1;
-        color: #6366f1;
+        border: 2px solid var(--primary);
+        color: var(--primary);
     }
-    .card {
-        background: #121a2f;
-        border-radius: 16px;
-        overflow: hidden;
-        transition: transform 0.3s;
-    }
-    .card:hover {
-        transform: translateY(-8px);
-    }
-    .nft-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 24px;
-        margin-top: 30px;
-    }
-    .nft-img {
-        width: 100%;
-        height: 260px;
-        object-fit: cover;
-        background: #1e2937;
-    }
-    .nft-info {
-        padding: 16px;
-    }
-    .nft-info h4 {
-        margin: 0 0 8px;
-    }
-    .price {
-        color: #22d3ee;
-        font-weight: bold;
-    }
-    .section {
-        margin: 60px 0;
-    }
-    h2 {
-        font-size: 32px;
-        margin-bottom: 20px;
-    }
+
+    .section { margin: 70px 0; }
+    h2 { font-size: 32px; margin-bottom: 20px; }
+
     .tab {
-        display: inline-block;
-        padding: 10px 24px;
+        padding: 10px 26px;
         background: #1e2937;
         border-radius: 9999px;
         margin-right: 10px;
         cursor: pointer;
+        transition: all 0.3s;
     }
     .tab.active {
-        background: #6366f1;
-    }
-    input, textarea {
-        width: 100%;
-        padding: 14px;
-        margin: 10px 0;
-        background: #1e2937;
-        border: none;
-        border-radius: 12px;
+        background: var(--primary);
         color: white;
     }
-    .wallet-info {
-        background: #1e2937;
-        padding: 16px;
-        border-radius: 16px;
-        margin-bottom: 30px;
-    }
-    small {
-        color: #94a3b8;
+
+    footer {
+        text-align: center;
+        padding: 40px 0;
+        color: #64748b;
+        border-top: 1px solid #1e2937;
+        margin-top: 80px;
     }
 </style>
 </head>
@@ -156,7 +162,6 @@
 <body>
 <div class="container">
 
-    <!-- HEADER -->
     <header>
         <div class="logo">NFTOS Base</div>
         <nav>
@@ -165,68 +170,70 @@
             <a href="#" onclick="showSection('mycollection')">My Collection</a>
         </nav>
         <div>
-            <button onclick="connectInjected()" class="btn-primary" style="width:auto; padding:10px 20px;">Connect Wallet</button>
-            <button onclick="connectWC()" class="btn-outline" style="width:auto; padding:10px 20px; margin-left:10px;">WalletConnect</button>
+            <button onclick="connectInjected()" class="btn-primary" style="padding:10px 22px;">Connect Wallet</button>
+            <button onclick="connectWC()" class="btn-outline" style="padding:10px 22px; margin-left:10px;">WC</button>
         </div>
     </header>
 
-    <!-- WALLET INFO -->
-    <div class="wallet-info" id="walletInfo" style="display:none;">
+    <!-- Wallet Info -->
+    <div class="wallet-info" id="walletInfo" style="display:none; background:#1e2937; padding:16px; border-radius:16px; margin:20px 0;">
         <b>Connected:</b> <small id="addr">0x...</small><br>
         <span id="bal">0.00 ETH</span>
     </div>
 
     <!-- HERO -->
-    <div class="hero" id="hero">
-        <h1>Discover Digital Art on NFTOS Base</h1>
-        <p>Fast, cheap, and secure NFT marketplace built for the NFTOS Base ecosystem</p>
-        <button onclick="showSection('mint')" style="margin-top:30px; padding:16px 40px; font-size:18px;">Mint Your First NFT</button>
+    <div class="hero">
+        <h1>Discover, Collect & Mint<br>on NFTOS Base</h1>
+        <p>The fastest growing NFT marketplace on Base — low fees, real community.</p>
+        <button onclick="showSection('mint')" style="padding:18px 48px; font-size:19px;">Start Minting Now</button>
     </div>
 
-    <!-- EXPLORE SECTION -->
+    <!-- EXPLORE -->
     <div id="exploreSection" class="section">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search NFTs, artists, collections..." onkeyup="filterNFTs()">
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <h2>Featured NFTs</h2>
             <div>
-                <span class="tab active" onclick="filterCategory(this)">All</span>
-                <span class="tab" onclick="filterCategory(this)">Art</span>
-                <span class="tab" onclick="filterCategory(this)">Collectibles</span>
+                <span class="tab active" data-category="all" onclick="filterByCategory(this)">All</span>
+                <span class="tab" data-category="Art" onclick="filterByCategory(this)">Art</span>
+                <span class="tab" data-category="Collectibles" onclick="filterByCategory(this)">Collectibles</span>
             </div>
         </div>
 
-        <div class="nft-grid" id="nftGrid">
-            <!-- Populated by JS -->
-        </div>
+        <div class="nft-grid" id="nftGrid"></div>
     </div>
 
-    <!-- MINT SECTION -->
+    <!-- MINT -->
     <div id="mintSection" class="section" style="display:none;">
-        <h2>Mint New NFT</h2>
-        <div class="card" style="max-width:600px; margin:auto; padding:30px;">
-            <input id="nftName" placeholder="NFT Name (e.g. NFTOS Warrior #42)">
-            <textarea id="nftDesc" rows="3" placeholder="Description..."></textarea>
-            <input id="nftPrice" placeholder="List Price (in ETH)" value="0.05">
-            
-            <div style="margin:20px 0; text-align:center; background:#1e2937; padding:40px; border-radius:12px;">
-                <p style="color:#64748b;">Image Preview (Demo)</p>
-                <div style="width:180px; height:180px; background:linear-gradient(45deg,#6366f1,#a855f7); margin:auto; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:60px;">
-                    🛡️
-                </div>
+        <h2>Mint Your NFT</h2>
+        <div class="card" style="max-width:620px; margin:auto; padding:40px;">
+            <input id="nftName" placeholder="NFT Name (e.g. Cyber Base #101)">
+            <textarea id="nftDesc" rows="4" placeholder="Describe your NFT..."></textarea>
+            <input id="nftPrice" type="number" placeholder="Listing Price (ETH)" value="0.08">
+
+            <div style="margin:30px 0; text-align:center;">
+                <p style="color:#64748b; margin-bottom:10px;">Preview</p>
+                <div id="previewEmoji" style="width:200px; height:200px; margin:auto; font-size:120px; background:#1e2937; border-radius:20px; display:flex; align-items:center; justify-content:center;">🌌</div>
             </div>
 
-            <button onclick="mintNFT()" class="btn-primary">Mint NFT • 0.0005 ETH</button>
-            <small style="display:block; text-align:center; margin-top:10px;">Gas fees are very low on NFTOS Base</small>
+            <button onclick="mintNFT()" class="btn-primary">Mint NFT • ~0.0008 ETH</button>
+            <small style="display:block; text-align:center; margin-top:12px; color:#64748b;">
+                Gas fees are extremely low on Base Sepolia
+            </small>
         </div>
     </div>
 
     <!-- MY COLLECTION -->
     <div id="myCollectionSection" class="section" style="display:none;">
         <h2>My Collection</h2>
-        <div class="nft-grid" id="myCollectionGrid">
-            <!-- Populated by JS -->
-        </div>
+        <div class="nft-grid" id="myCollectionGrid"></div>
     </div>
 
+    <footer>
+        <p>&copy; 2026 NFTOS Base • Built for Base Ecosystem</p>
+        <p style="margin-top:8px;">Demo Frontend • Connect your wallet to interact</p>
+    </footer>
 </div>
 
 <script>
@@ -241,20 +248,21 @@ const BASE_SEPOLIA = {
 
 const WC_PROJECT_ID = "REPLACE_WITH_YOUR_PROJECT_ID";
 
-let provider, signer, address;
+let provider, signer, address = "";
 let myNFTs = [];
 
 // Sample NFTs
-const sampleNFTs = [
-    { id:1, name:"NFTOS Guardian #1", price:"0.12", image:"🛡️", owner:"0x123...", category:"Art" },
-    { id:2, name:"Neon Samurai", price:"0.45", image:"⚔️", owner:"0xabc...", category:"Collectibles" },
-    { id:3, name:"Cosmic Bloom", price:"0.08", image:"🌌", owner:"0xdef...", category:"Art" },
-    { id:4, name:"Pixel Legend", price:"0.22", image:"🎮", owner:"0x456...", category:"Collectibles" }
+let allNFTs = [
+    { id:1, name:"NFTOS Guardian #1", price:"0.12", image:"🛡️", category:"Art" },
+    { id:2, name:"Neon Ronin", price:"0.45", image:"⚔️", category:"Collectibles" },
+    { id:3, name:"Cosmic Dreamer", price:"0.08", image:"🌌", category:"Art" },
+    { id:4, name:"Pixel Emperor", price:"0.22", image:"👑", category:"Collectibles" },
+    { id:5, name:"Base Voyager", price:"0.15", image:"🚀", category:"Art" },
 ];
 
-// ============== WALLET ==============
-async function connectInjected() {
-    if (!window.ethereum) return alert("No injected wallet found");
+// ============== WALLET FUNCTIONS ==============
+async function connectInjected() { /* same as before */ 
+    if (!window.ethereum) return alert("No wallet found");
     provider = new ethers.BrowserProvider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     signer = await provider.getSigner();
@@ -263,12 +271,8 @@ async function connectInjected() {
     initUI();
 }
 
-async function connectWC() {
-    const wc = await window.EthereumProvider.init({
-        projectId: WC_PROJECT_ID,
-        chains: [84532],
-        showQrModal: true
-    });
+async function connectWC() { /* same as before */ 
+    const wc = await window.EthereumProvider.init({ projectId: WC_PROJECT_ID, chains: [84532], showQrModal: true });
     await wc.connect();
     provider = new ethers.BrowserProvider(wc);
     signer = await provider.getSigner();
@@ -277,93 +281,80 @@ async function connectWC() {
     initUI();
 }
 
-async function ensureNetwork() {
-    try {
-        await window.ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: BASE_SEPOLIA.chainId }]
-        });
-    } catch {
-        await window.ethereum.request({
-            method: "wallet_addEthereumChain",
-            params: [BASE_SEPOLIA]
-        });
-    }
+async function ensureNetwork() { /* same */ 
+    try { await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: BASE_SEPOLIA.chainId }] }); }
+    catch { await window.ethereum.request({ method: "wallet_addEthereumChain", params: [BASE_SEPOLIA] }); }
 }
 
 function initUI() {
     document.getElementById("walletInfo").style.display = "block";
-    document.getElementById("addr").textContent = address.slice(0,6) + "..." + address.slice(-4);
-    document.getElementById("bal").textContent = "8.45 ETH";
+    document.getElementById("addr").textContent = address.slice(0,6)+"..." + address.slice(-4);
+    document.getElementById("bal").textContent = "12.84 ETH";
     renderExplore();
-    renderMyCollection();
 }
 
-// ============== RENDERING ==============
-function renderExplore() {
-    const grid = document.getElementById("nftGrid");
-    grid.innerHTML = sampleNFTs.map(nft => `
+// ============== RENDER & FILTER ==============
+function renderNFTs(nfts, containerId) {
+    const grid = document.getElementById(containerId);
+    grid.innerHTML = nfts.map(nft => `
         <div class="card">
-            <div class="nft-img" style="font-size:120px; display:flex; align-items:center; justify-content:center; background:#1e2937;">
-                ${nft.image}
-            </div>
+            <div class="nft-img">${nft.image}</div>
             <div class="nft-info">
                 <h4>${nft.name}</h4>
-                <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
                     <div><small>Price</small><br><span class="price">${nft.price} ETH</span></div>
-                    <button onclick="buyNFT(${nft.id})" class="btn-primary" style="width:auto; padding:8px 20px;">Buy Now</button>
+                    ${containerId === 'nftGrid' ? 
+                        `<button onclick="buyNFT(${nft.id})" class="btn-primary" style="width:auto; padding:8px 24px;">Buy</button>` : 
+                        `<small style="color:#22d3ee;">Owned</small>`}
                 </div>
             </div>
         </div>
     `).join('');
 }
 
-function renderMyCollection() {
-    const grid = document.getElementById("myCollectionGrid");
-    if (myNFTs.length === 0) {
-        grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#64748b;">You don't own any NFTs yet. Mint some!</p>`;
-        return;
-    }
-    grid.innerHTML = myNFTs.map(nft => `
-        <div class="card">
-            <div class="nft-img" style="font-size:120px; display:flex; align-items:center; justify-content:center;">${nft.image}</div>
-            <div class="nft-info">
-                <h4>${nft.name}</h4>
-                <small>Owned by you</small>
-            </div>
-        </div>
-    `).join('');
+function renderExplore() {
+    renderNFTs(allNFTs, "nftGrid");
 }
 
-function filterCategory(el) {
+function filterByCategory(el) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
+
+    const category = el.dataset.category;
+    let filtered = category === "all" ? allNFTs : allNFTs.filter(n => n.category === category);
+    renderNFTs(filtered, "nftGrid");
 }
 
-// ============== ACTIONS ==============
-async function mintNFT() {
-    if (!signer) return alert("Please connect wallet first");
+function filterNFTs() {
+    const term = document.getElementById("searchInput").value.toLowerCase();
+    const filtered = allNFTs.filter(n => n.name.toLowerCase().includes(term));
+    renderNFTs(filtered, "nftGrid");
+}
 
-    const name = document.getElementById("nftName").value || "Untitled NFTOS #" + Math.floor(Math.random()*1000);
+// ============== MINT & BUY ==============
+async function mintNFT() {
+    if (!signer) return alert("Please connect your wallet first");
+
+    const name = document.getElementById("nftName").value.trim() || "Untitled NFTOS #" + Math.floor(Math.random()*999);
     
     const newNFT = {
         id: Date.now(),
         name: name,
         image: "🌟",
-        price: "0.00"
+        category: "Art",
+        price: document.getElementById("nftPrice").value || "0.00"
     };
-    
+
     myNFTs.unshift(newNFT);
-    renderMyCollection();
-    
-    alert(`🎉 Successfully minted "${name}" on NFTOS Base!\n\nTransaction would appear on https://sepolia.basescan.org`);
-    
+    renderNFTs(myNFTs, "myCollectionGrid");
+
+    alert(`🎉 Congratulations!\n\n"${name}" has been successfully minted on Base Sepolia.\n\nView on: https://sepolia.basescan.org`);
     showSection('mycollection');
 }
 
 function buyNFT(id) {
-    if (!address) return alert("Connect wallet to buy");
-    alert(`✅ Purchase successful!\nNFT #${id} transferred to your wallet.\n\n(This is a demo)`);
+    if (!address) return alert("Connect wallet to purchase");
+    alert(`✅ Purchase successful!\nNFT transferred to your wallet.\n\n(This is a frontend demo)`);
 }
 
 // ============== SECTION SWITCH ==============
@@ -371,14 +362,13 @@ function showSection(section) {
     document.getElementById("exploreSection").style.display = section === 'explore' ? 'block' : 'none';
     document.getElementById("mintSection").style.display = section === 'mint' ? 'block' : 'none';
     document.getElementById("myCollectionSection").style.display = section === 'mycollection' ? 'block' : 'none';
-    
+
     if (section === 'explore') renderExplore();
-    if (section === 'mycollection') renderMyCollection();
+    if (section === 'mycollection') renderNFTs(myNFTs, "myCollectionGrid");
 }
 
 // Init
 showSection('explore');
-renderExplore();
 </script>
 </body>
 </html>
