@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import "forge-std/Script.sol";
-import "../src/NFTOS.sol";
+import "../src/Contract.sol";
 
 contract DeployNFTOS is Script {
     function run() external {
