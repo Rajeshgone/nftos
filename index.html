@@ -1,181 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="base:app_id" content="6a0cc06e6b7916c4b4095282" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFTOS Base • Marketplace</title>
+    <meta name="base:app_id" content="6a0cc06e6b7916c4b4095282" />
+    <title>NFTOS • Base</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
-
+    
     <style>
-        :root { --primary: #6366f1; --accent: #a855f7; }
+        :root {
+            --bg: #0a0b0f;
+            --card: #11131f;
+            --text: #e0e0e0;
+            --primary: #6366f1;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            margin: 0; font-family: 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #0a0f1c 0%, #1a2338 100%);
-            color: #fff; min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
         }
-        .container { max-width: 1280px; margin: auto; padding: 16px; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #1e2937; flex-wrap: wrap; }
-        .logo { font-size: 32px; font-weight: 800; background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nft-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 28px; margin-top: 30px; }
+        nav {
+            background: rgba(10,11,15,0.95);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1f2233;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            height: 76px;
+            gap: 24px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .search {
+            flex: 1;
+            max-width: 520px;
+            background: #1a1d2e;
+            border-radius: 9999px;
+            padding: 10px 20px;
+            border: 1px solid #2a2f45;
+            color: white;
+        }
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            margin-left: 28px;
+            font-weight: 500;
+        }
+        .nav-links a:hover { color: white; }
+
+        .hero {
+            background: linear-gradient(135deg, #1a1f38, #2a1a3d);
+            text-align: center;
+            padding: 120px 20px 80px;
+        }
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .hero p { font-size: 22px; color: #aaa; }
+
+        .section {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 24px;
+        }
+        h2 {
+            font-size: 28px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+            padding-bottom: 8px;
+        }
+        .nft-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
         .card {
-            background: #121a2f; border-radius: 20px; overflow: hidden; transition: all 0.4s;
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid #1f2233;
         }
-        .card:hover { transform: translateY(-12px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.4); }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.5);
+        }
         .nft-img {
-            height: 280px; display: flex; align-items: center; justify-content: center;
-            font-size: 120px; background: linear-gradient(45deg, #1e2937, #334155);
+            height: 260px;
+            background: #1f2233;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            border-bottom: 1px solid #2a2f45;
         }
-        .nft-info { padding: 18px; }
-        .price { color: #22d3ee; font-weight: 700; font-size: 18px; }
+        .nft-info {
+            padding: 16px;
+        }
+        .nft-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .price {
+            color: #22d3ee;
+            font-weight: 700;
+            font-size: 18px;
+        }
         button {
-            padding: 12px 24px; border: none; border-radius: 12px; font-size: 16px;
-            cursor: pointer; transition: all 0.3s;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .btn-primary { background: var(--primary); color: white; width: 100%; }
-        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
-        .section { margin: 70px 0; display: none; }
-        .section.active { display: block; }
-        .hero { text-align: center; padding: 100px 20px 80px; background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1)); border-radius: 24px; margin: 30px 0; }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: white;
+        }
+        .connect-btn {
+            background: var(--primary);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
-<div class="container">
 
-    <header>
-        <div class="logo">NFTOS Base</div>
-        <div>
-            <button onclick="connectWallet()" class="btn-primary" style="padding:10px 22px;">Connect Wallet</button>
+<nav>
+    <div class="nav-container">
+        <div class="logo">NFTOS</div>
+        <input type="text" class="search" placeholder="Search NFTs, collections..." />
+        <div class="nav-links">
+            <a href="#">Explore</a>
+            <a href="#">Stats</a>
+            <a href="#">Create</a>
         </div>
-    </header>
-
-    <div class="hero">
-        <h1>Discover, Mint & Trade<br>on NFTOS Base</h1>
-        <p>Real ERC721 Marketplace on Base</p>
+        <button onclick="connectWallet()" class="connect-btn">Connect Wallet</button>
     </div>
+</nav>
 
-    <!-- EXPLORE -->
-    <div id="exploreSection" class="section active">
-        <h2>Live Marketplace</h2>
-        <div class="nft-grid" id="marketGrid"></div>
-    </div>
+<div class="hero">
+    <h1>The Fastest NFT Marketplace on Base</h1>
+    <p>Low fees • Real community • Built for creators</p>
+</div>
 
-    <!-- MINT -->
-    <div id="mintSection" class="section">
-        <h2>Mint New NFT</h2>
-        <div class="card" style="max-width:600px; margin:auto; padding:40px;">
-            <input id="uri" placeholder="Image URL / IPFS / Emoji" style="width:100%; padding:12px; margin:10px 0; background:#1e2937; border:none; border-radius:12px; color:white;">
-            <button onclick="mintNFT()" class="btn-primary">Mint NFT (0.0008 ETH)</button>
-        </div>
-    </div>
+<div class="section">
+    <h2>Trending on Base</h2>
+    <div class="nft-grid" id="marketGrid"></div>
+</div>
 
-    <!-- MY COLLECTION -->
-    <div id="mySection" class="section">
-        <h2>My Collection</h2>
-        <div class="nft-grid" id="myGrid"></div>
-    </div>
-
-    <div style="text-align:center; margin:50px 0;">
-        <button onclick="showSection('explore')" class="btn-outline">Explore</button>
-        <button onclick="showSection('mint')" class="btn-primary" style="margin:0 10px;">Mint</button>
-        <button onclick="showSection('my')" class="btn-outline">My Collection</button>
+<div class="section">
+    <h2>Mint New NFT</h2>
+    <div style="max-width: 500px; margin: auto; background: #11131f; padding: 40px; border-radius: 20px;">
+        <input id="uri" placeholder="Image URL or IPFS link" style="width:100%; padding:14px; background:#1a1d2e; border:none; border-radius:12px; color:white; margin-bottom:16px;">
+        <button onclick="mintNFT()" class="btn-primary">Mint NFT — 0.0008 ETH</button>
     </div>
 </div>
 
 <script>
 // ================== CONFIG ==================
-const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"; // ← CHANGE AFTER DEPLOY
+const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"; // ← Update after deploy
 
 const ABI = [
     "function mint(string uri) public payable",
     "function list(uint256 tokenId, uint256 price) public",
     "function buy(uint256 tokenId) public payable",
-    "function cancelListing(uint256 tokenId) public",
-    "function ownerOf(uint256 tokenId) public view returns (address)",
-    "function tokenURI(uint256 tokenId) public view returns (string)",
-    "function listings(uint256) public view returns (address seller, uint256 price, bool active)",
-    "event Minted(uint256 tokenId, address owner, string uri)",
-    "event Listed(uint256 tokenId, uint256 price)",
-    "event Sold(uint256 tokenId, address buyer, uint256 price)"
+    "function tokenURI(uint256 tokenId) public view returns (string)"
 ];
 
 let provider, signer, address = "";
 let contract;
 
-// ================== CONNECT WALLET ==================
+// Connect Wallet
 async function connectWallet() {
-    if (!window.ethereum) return alert("Please install MetaMask!");
-    
+    if (!window.ethereum) return alert("Please install MetaMask");
     provider = new ethers.BrowserProvider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     signer = await provider.getSigner();
     address = await signer.getAddress();
-
     contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-    
-    document.getElementById("exploreSection").classList.add("active");
-    alert("Wallet Connected!\n\nNow deploy your contract and update CONTRACT_ADDRESS");
+    alert("✅ Wallet Connected!");
     loadMarketplace();
 }
 
-// ================== MINT ==================
+// Mint
 async function mintNFT() {
-    if (!contract) return alert("Connect wallet first");
-    const uri = document.getElementById("uri").value || "https://example.com/nft.json";
-    
+    if (!contract) return alert("Please connect wallet first");
+    const uri = document.getElementById("uri").value || "https://picsum.photos/id/237/400";
     try {
         const tx = await contract.mint(uri, { value: ethers.parseEther("0.0008") });
-        alert("Minting... Transaction sent: " + tx.hash);
+        alert("Minting... Tx: " + tx.hash);
         await tx.wait();
-        alert("✅ NFT Minted Successfully!");
-        loadMyCollection();
+        alert("🎉 NFT Minted Successfully!");
     } catch (e) {
-        alert("Error: " + e.message);
+        alert("Error: " + (e.shortMessage || e.message));
     }
 }
 
-// ================== MARKETPLACE ==================
-async function loadMarketplace() {
-    // For demo, show placeholder. You can expand later with events or TheGraph
-    document.getElementById("marketGrid").innerHTML = `
-        <div class="card"><div class="nft-img">🌌</div><div class="nft-info"><h4>Coming Soon</h4><p>Live listings will appear here after deployment</p></div></div>
-    `;
-}
-
-async function loadMyCollection() {
-    if (!contract || !address) return;
-    const grid = document.getElementById("myGrid");
-    grid.innerHTML = "<p>Loading your NFTs...</p>";
-
-    // Simple version: show placeholder
+// Demo Marketplace
+function loadMarketplace() {
+    const grid = document.getElementById("marketGrid");
     grid.innerHTML = `
         <div class="card">
-            <div class="nft-img">🖼️</div>
+            <div class="nft-img">🌌</div>
             <div class="nft-info">
-                <h4>Your NFT</h4>
-                <button onclick="listForSale(0)" class="btn-primary" style="margin-top:10px;">List for Sale</button>
+                <div class="nft-name">Cosmic Dream #001</div>
+                <div class="price">0.008 ETH</div>
+                <button onclick="alert('Buy feature coming soon')" style="margin-top:12px" class="btn-primary">Buy Now</button>
             </div>
         </div>
     `;
 }
 
-function listForSale(tokenId) {
-    const price = prompt("Enter price in ETH (e.g. 0.05):");
-    if (price) alert(`Listing token #${tokenId} for ${price} ETH...`);
-}
-
-function showSection(sec) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    if (sec === 'explore') document.getElementById("exploreSection").classList.add("active");
-    if (sec === 'mint') document.getElementById("mintSection").classList.add("active");
-    if (sec === 'my') {
-        document.getElementById("mySection").classList.add("active");
-        loadMyCollection();
-    }
-}
-
 // Init
-showSection('explore');
+loadMarketplace();
 </script>
 </body>
 </html>
