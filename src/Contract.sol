@@ -4,13 +4,11 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 contract NFTOS is ERC721, ERC721URIStorage, Ownable {
     uint256 public nextTokenId;
-    uint256 public mintPrice = 0.0008 ether; // Very low for Base
+    uint256 public mintPrice = 0.0008 ether;
 
-    // Marketplace
     struct Listing {
         address seller;
         uint256 price;
@@ -19,8 +17,7 @@ contract NFTOS is ERC721, ERC721URIStorage, Ownable {
 
     mapping(uint256 => Listing) public listings;
 
-    // Royalties (EIP-2981)
-    uint256 public royaltyFee = 500; // 5% (basis points)
+    uint256 public royaltyFee = 500; // 5%
     address public royaltyReceiver;
 
     event Minted(uint256 tokenId, address owner, string uri);
@@ -39,40 +36,27 @@ contract NFTOS is ERC721, ERC721URIStorage, Ownable {
         emit Minted(tokenId, msg.sender, uri);
     }
 
-    // === Marketplace ===
     function list(uint256 tokenId, uint256 price) public {
         require(ownerOf(tokenId) == msg.sender, "Not owner");
-        require(price > 0, "Price must be > 0");
+        require(price > 0, "Price > 0");
 
-        listings[tokenId] = Listing({
-            seller: msg.sender,
-            price: price,
-            active: true
-        });
-
+        listings[tokenId] = Listing(msg.sender, price, true);
         emit Listed(tokenId, price);
     }
 
     function buy(uint256 tokenId) public payable {
-        Listing memory listing = listings[tokenId];
-        require(listing.active, "Not listed");
-        require(msg.value >= listing.price, "Insufficient funds");
+        Listing memory l = listings[tokenId];
+        require(l.active, "Not listed");
+        require(msg.value >= l.price, "Insufficient funds");
 
-        address seller = listing.seller;
-        uint256 price = listing.price;
-
-        // Pay royalties
-        uint256 royalty = (price * royaltyFee) / 10000;
+        uint256 royalty = (l.price * royaltyFee) / 10000;
         payable(royaltyReceiver).transfer(royalty);
-        payable(seller).transfer(price - royalty);
+        payable(l.seller).transfer(l.price - royalty);
 
-        // Transfer NFT
-        _transfer(seller, msg.sender, tokenId);
-
-        // Deactivate listing
+        _transfer(l.seller, msg.sender, tokenId);
         listings[tokenId].active = false;
 
-        emit Sold(tokenId, msg.sender, price);
+        emit Sold(tokenId, msg.sender, l.price);
     }
 
     function cancelListing(uint256 tokenId) public {
@@ -80,17 +64,11 @@ contract NFTOS is ERC721, ERC721URIStorage, Ownable {
         listings[tokenId].active = false;
     }
 
-    // === Admin ===
-    function setMintPrice(uint256 _newPrice) external onlyOwner {
-        mintPrice = _newPrice;
+    function setMintPrice(uint256 _price) external onlyOwner {
+        mintPrice = _price;
     }
 
-    function setRoyalty(uint256 _fee, address _receiver) external onlyOwner {
-        royaltyFee = _fee;
-        royaltyReceiver = _receiver;
-    }
-
-    // Required overrides
+    // Overrides
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }
