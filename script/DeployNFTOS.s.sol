@@ -9,7 +9,11 @@ contract DeployNFTOS is Script {
         vm.startBroadcast();
 
         NFTOS nftos = new NFTOS();
-        console.log("NFTOS deployed at:", address(nftos));
+        
+        console.log("==================================");
+        console.log("NFTOS deployed successfully!");
+        console.log("Contract Address:", address(nftos));
+        console.log("==================================");
 
         vm.stopBroadcast();
     }
