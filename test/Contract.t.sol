@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 
 import "src/Contract.sol";
 
-contract TestContract is Test {
+contract TestContrac is Test {
     Contract c;
 
     function setUp() public {
