@@ -5,7 +5,7 @@ contract DeployNFTOS is Script {
     function run() external {
         vm.startBroadcast();
 
-        // Explicitly tell Foundry the contract name
+        // Explicitly tell Foundry
         NFTOS nftos = new NFTOS();
 
         console.log("=====================================");
