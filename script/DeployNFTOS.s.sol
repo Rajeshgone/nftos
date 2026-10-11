@@ -5,7 +5,7 @@ contract DeployNFTOS is Script {
     function run() external {
         vm.startBroadcast();
 
-        // Explicitly 
+        // Exp
         NFTOS nftos = new NFTOS();
 
         console.log("=====================================");
